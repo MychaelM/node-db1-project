@@ -39,4 +39,19 @@ router.post("/", async (req, res, next) => {
   }
 })
 
+router.put("/:id", async (req, res, next) => {
+  try {
+    // UPDATE accounts SET name = ? AND budget = ? WHERE id = ?
+    const payload = {
+      name: req.body.name,
+      budget: req.body.budget
+    }
+    await db("accounts").update(payload).where("id", req.params.id);
+    const account = await db("accounts").first().where("id", req.params.id)
+    res.status(200).json(account);
+  } catch(err) {
+    next(err);
+  }
+})
+
 module.exports = router;
